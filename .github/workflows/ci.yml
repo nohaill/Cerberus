@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      CERBERUS_MOCK_MODE: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies (mock-mode only, no torch/transformers/sentence-transformers needed)
+        run: |
+          pip install fastapi "uvicorn[standard]" pydantic pydantic-settings numpy langgraph prometheus_client pytest pytest-asyncio httpx
+
+      - name: Run unit + integration tests
+        run: pytest tests/ --ignore=tests/test_eval_regression.py -v
+
+      - name: Run red-team eval regression gate
+        run: pytest tests/test_eval_regression.py -v
+
+      - name: Generate full eval report artifact
+        run: python -m eval.run_eval
+
+      - name: Upload eval report
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: eval/reports/latest_report.md
