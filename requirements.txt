@@ -1,0 +1,21 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+pydantic-settings>=2.2
+# ML stack. Verified working: torch 2.7.1+cpu, transformers 4.53.2 on
+# Python 3.13. Load models via a bare from_pretrained -- passing
+# torch_dtype/device_map/low_cpu_mem_usage kwargs can force meta-device init
+# on this build (see app/classifiers/hf_classifier.py, _load_* helpers).
+transformers>=4.53
+torch>=2.7
+numpy>=1.26
+langgraph>=1.0
+anthropic>=0.40
+prometheus_client>=0.20
+pytest>=8.0
+pytest-asyncio>=0.23
+httpx>=0.27
+
+# Real (non-mock) mode extras -- not needed for CERBERUS_MOCK_MODE=true
+sentence-transformers>=2.7
+psycopg2-binary>=2.9

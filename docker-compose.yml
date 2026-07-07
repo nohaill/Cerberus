@@ -1,0 +1,35 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - CERBERUS_MOCK_MODE=${CERBERUS_MOCK_MODE:-true}
+      - CERBERUS_VECTOR_STORE_BACKEND=${CERBERUS_VECTOR_STORE_BACKEND:-memory}
+      - CERBERUS_DATABASE_URL=postgresql://cerberus:cerberus@policy-db:5432/cerberus_policy
+    # Only actually needed when CERBERUS_VECTOR_STORE_BACKEND=pgvector;
+    # harmless (and skippable) otherwise since InMemoryVectorStore is the default.
+    depends_on:
+      - policy-db
+
+  policy-db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: cerberus
+      POSTGRES_PASSWORD: cerberus
+      POSTGRES_DB: cerberus_policy
+    ports:
+      - "5432:5432"
+    volumes:
+      - policy-db-data:/var/lib/postgresql/data
+
+  # Optional: `docker compose up -d prometheus` to scrape /metrics.
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   volumes:
+  #     - ./docs/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
+
+volumes:
+  policy-db-data:

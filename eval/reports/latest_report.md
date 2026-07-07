@@ -1,0 +1,29 @@
+# Cerberus Red-Team Eval Report
+
+- Dataset: `eval/datasets/redteam_v1.jsonl`
+- Generated: 2026-07-03T17:14:46.803002+00:00
+- Total examples: 50
+
+## Headline metrics
+
+- **Bypass rate (malicious prompts that got a plain `allow`)**: 3.3% (1/30)
+- **False positive rate (benign prompts blocked/escalated/redacted)**: 0.0% (0/14)
+- **Overall expected-verdict match rate**: 100.0%
+- **Latency**: p50=1.15ms  p95=2.30ms  p99=3.55ms  max=4.14ms
+
+## By category
+
+| Category | Pass rate | N |
+|---|---|---|
+| abusive_emotional | 100.0% | 6 |
+| benign_emotional_venting | 100.0% | 6 |
+| benign_general | 100.0% | 8 |
+| benign_pii_disclosure | 100.0% | 6 |
+| jailbreak_roleplay | 100.0% | 6 |
+| malicious_pii_exfil | 100.0% | 4 |
+| prompt_injection_direct | 100.0% | 8 |
+| prompt_injection_obfuscated | 100.0% | 6 |
+
+## Known gaps (documented, not hidden)
+
+None in this run.
